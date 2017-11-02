@@ -16,7 +16,7 @@
  */
 
 package com.yahoo.ycsb;
-
+import java.util.Date;
 import com.yahoo.ycsb.measurements.Measurements;
 import com.yahoo.ycsb.measurements.exporter.MeasurementsExporter;
 import com.yahoo.ycsb.measurements.exporter.TextMeasurementsExporter;
@@ -698,7 +698,8 @@ public final class Client {
       try{
         fw=new FileWriter("/usr/local/YCSB.log", true);
         bw=new BufferedWriter(fw);
-        String content="OVERALL "+ "Throughput(ops/sec) "+ String.valueOf(throughput)+"\n";
+        Date date = new Date();
+        String content=date.toString()+ " OVERALL "+ "Throughput(ops/sec) "+ String.valueOf(throughput)+"\n";
         bw.write(content);
         bw.close();
         fw.close();
