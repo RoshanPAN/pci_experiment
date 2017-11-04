@@ -12,7 +12,7 @@
       printf("Starting ...\n");
 
       /* loop 50 times, try and consume 50 MB of memory */
-      for (i = 0; i < 4000; ++i) {
+      for (i = 0; i < 5000; ++i) {
 
           /* failure to allocate memo*/
           if ((p = malloc(1<<20)) == NULL) {
@@ -28,7 +28,7 @@
 
       /* exit message and return */
       printf("Done!\n");
-      sleep(10);
+      sleep(100);
       return 0;
 
   }

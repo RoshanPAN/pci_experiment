@@ -201,7 +201,7 @@ def iops(dev, blocksize=512, pattern='random', t=2):
     and print a stats line
     Returns: IOs/s
     """
-
+   
     fh = open(dev, 'r')
     count = 0
     start = time.time()
@@ -226,7 +226,8 @@ def iops(dev, blocksize=512, pattern='random', t=2):
 
 if __name__ == '__main__':
     # parse cli
-    t = 2                       # seconds
+    print "warning this program run for infinitely without ctrl+c that may be will damage disk don't forget to turn off. "
+    t = 2;                       # seconds
     num_threads = 32            # threads
     blocksize = 512             # bytes
     units='si'                  # si|machine-readable
@@ -284,9 +285,7 @@ if __name__ == '__main__':
             print " %sB blocks: %6.1f IO/s, %sB/s (%sbit/s)" % (greek(blocksize, 0, units), _iops,
                 greek(bandwidth, 1, units), greek(8*bandwidth, 1, units))
 
-            if exact_blocksize:
-                break
-            blocksize *= 2
+            
 
     except IOError, (err_no, err_str):
         raise SystemExit(err_str)
