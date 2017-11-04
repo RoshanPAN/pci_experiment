@@ -9,6 +9,7 @@ run command: ./memory_fill
 
 ## disk/iops: 
 fill all io read to slow down hbase operation.
+run command: sudo ./occupy_disk_read.sh
 
 ## disable_net_service.sh
 disable net service using systemd api for a period of time(can be adjusted in) to mimic a network error.
