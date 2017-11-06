@@ -1,5 +1,6 @@
 #!/bin/bash
-workname="workloada"
-cd /usr/local/YCSB
-bin/ycsb run hbase12 -P workloads/${workname} -cp /usr/local/hbase-1.2.6/conf -p table=usertable -p columnfamily=family
+workname="workloady"
+cd $YCSB_PREFIX
+bin/ycsb run hbase12 -P workloads/${workname} -cp $HBASE_PREFIX/conf -p table=usertable -p columnfamily=family
+cd -
 echo "run ${workname}"
