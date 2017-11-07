@@ -18,19 +18,24 @@ opyright (c) 2010 Yahoo! Inc. All rights reserved.
 # Workload A: Update heavy workload
 #   Application example: Session store recording recent actions
 #
-#   Read/update ratio: 50/50
-#   Default data size: 1 KB records (10 fields, 100 bytes each, plus key)
+#   Total data size when loaded: 1.5 GB
+#   Default data size: 10 KB records (20 fields, 500 bytes each, plus key)
 #   Request distribution: zipfian
 
-recordcount=6000
+maxexecutiontime=15
+
+recordcount=150000
 operationcount=6000
 workload=com.yahoo.ycsb.workloads.CoreWorkload
 
 readallfields=true
 
-readproportion=0.4
-updateproportion=0.35
-scanproportion=0.15
-insertproportion=0.1
+fieldcount=20
+fieldlength=5000
+
+readproportion=0.3
+updateproportion=0.4
+scanproportion=0.1
+insertproportion=0.2
 
 requestdistribution=zipfian
