@@ -1,4 +1,4 @@
-opyright (c) 2010 Yahoo! Inc. All rights reserved.
+# Copyright (c) 2010 Yahoo! Inc. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you
 # may not use this file except in compliance with the License. You
@@ -19,13 +19,13 @@ opyright (c) 2010 Yahoo! Inc. All rights reserved.
 #   Application example: Session store recording recent actions
 #
 #   Total data size when loaded: 1.5 GB
-#   Default data size: 10 KB records (20 fields, 500 bytes each, plus key)
+#   Default data size: 1 MB records (20 fields, 500 bytes each, plus key)
 #   Request distribution: zipfian
 
 maxexecutiontime=15
 
-recordcount=150000
-operationcount=6000
+recordcount=15000
+operationcount=400000
 workload=com.yahoo.ycsb.workloads.CoreWorkload
 
 readallfields=true
@@ -33,9 +33,9 @@ readallfields=true
 fieldcount=20
 fieldlength=5000
 
+insertproportion=0.2
 readproportion=0.3
 updateproportion=0.4
 scanproportion=0.1
-insertproportion=0.2
 
 requestdistribution=zipfian
