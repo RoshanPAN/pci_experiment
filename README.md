@@ -9,11 +9,12 @@ Shell script that replace YCSB files with modifies YCSB files.
 
 **modifyYCSB_new.sh**
 YCSB runs 1 time but using a record throughput periodly. 
+bin/ycsb run hbase12 -P workloads/${workname} -cp $HBASE_PREFIX/conf -p table=usertable -p columnfamily=family -thread 4 -s
+additionally, workload need to be large so it will last for a long period.
 
 **loadYCSB.sh**
 Load data into Hbase using YCSB script. In order to use this function, a -s needs to be appended in the YCSB start command for example:
-bin/ycsb run hbase12 -P workloads/${workname} -cp $HBASE_PREFIX/conf -p table=usertable -p columnfamily=family -thread 4 -s
-additionally, workload need to be large so it will last for a long period.
+
 
 **startYCSB.sh**
 Run the workload file.
