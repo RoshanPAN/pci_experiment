@@ -703,20 +703,6 @@ public final class Client {
       double throughput = 1000.0 * (opcount) / (runtime);
       exporter.write("OVERALL", "Throughput(ops/sec)", throughput);
 
-      //write throughput to file
-      FileWriter fw=null;
-      BufferedWriter bw=null;
-      try{
-	  fw=new FileWriter("/usr/local/YCSB.log");
-          bw=new BufferedWriter(fw);
-	  Sting content="OVERALL"+ "Throughput(ops/sec)"+ String.valueOf(throughput);
-	  bw.write(content);
-      }catch (IOException e){
-	  e.printStackTrace();
-      }
-      fw.close();
-      bw.close();
-
       
       final Map<String, Long[]> gcs = Utils.getGCStatst();
       long totalGCCount = 0;
