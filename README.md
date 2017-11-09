@@ -8,13 +8,13 @@ Shell script that replace YCSB files with modifies YCSB files.
 2. replace YCSB starter to create a loop that perform hbase reading and updating periodly(reading and updating 1000 item 1 time). (I'm still thinking if this is good enough or edit YCSB to do a continues operations and record time delta to calculate throughput is better.)
 
 **modifyYCSB_new.sh**
-YCSB runs 1 time but using a record throughput periodly. 
+YCSB runs 1 time but using a record throughput periodly. In order to use this function, a -s needs to be appended in the YCSB start command 
 For example:
 - bin/ycsb run hbase12 -P workloads/${workname} -cp $HBASE_PREFIX/conf -p table=usertable -p columnfamily=family -thread 4 -s
 - Additionally, workload need to be large so it will last for a long period.
 
 **loadYCSB.sh**
-Load data into Hbase using YCSB script. In order to use this function, a -s needs to be appended in the YCSB start command 
+Load data into Hbase using YCSB script. 
 
 
 **startYCSB.sh**
