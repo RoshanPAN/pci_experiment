@@ -23,7 +23,7 @@
 
 # maxexecutiontime=15
 
-recordcount=3000000
+recordcount=500000
 operationcount=200000
 workload=com.yahoo.ycsb.workloads.CoreWorkload
 
