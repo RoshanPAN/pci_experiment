@@ -16,7 +16,7 @@
  */
 
 package com.yahoo.ycsb;
-
+import java.util.Date;
 import com.yahoo.ycsb.measurements.Measurements;
 import com.yahoo.ycsb.measurements.exporter.MeasurementsExporter;
 import com.yahoo.ycsb.measurements.exporter.TextMeasurementsExporter;
@@ -24,6 +24,8 @@ import org.apache.htrace.core.HTraceConfiguration;
 import org.apache.htrace.core.TraceScope;
 import org.apache.htrace.core.Tracer;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -167,10 +169,6 @@ class StatusThread extends Thread {
 
     long interval = endIntervalMs - startTimeMs;
     double throughput = 1000.0 * (((double) totalops) / (double) interval);
-    double curthroughput = 1000.0 * (((double) (totalops - lastTotalOps)) /
-        ((double) (endIntervalMs - startIntervalMs)));
-    long estremaining = (long) Math.ceil(todoops / throughput);
-
       //write throughput to file
     FileWriter fw=null;
     BufferedWriter bw=null;
@@ -186,7 +184,13 @@ class StatusThread extends Thread {
     }catch (IOException e){
       e.printStackTrace();
     }
+
     
+    double curthroughput = 1000.0 * (((double) (totalops - lastTotalOps)) /
+        ((double) (endIntervalMs - startIntervalMs)));
+    long estremaining = (long) Math.ceil(todoops / throughput);
+
+
     DecimalFormat d = new DecimalFormat("#.##");
     String labelString = this.label + format.format(new Date());
 
@@ -616,7 +620,7 @@ public final class Client {
    */
   private static StatusThread statusthread = null;
 
-  // HTrace integration related constants
+  // HTrace integration related constants.
 
   /**
    * All keys for configuring the tracing system start with this prefix.
@@ -702,8 +706,9 @@ public final class Client {
       exporter.write("OVERALL", "RunTime(ms)", runtime);
       double throughput = 1000.0 * (opcount) / (runtime);
       exporter.write("OVERALL", "Throughput(ops/sec)", throughput);
-
       
+      
+
       final Map<String, Long[]> gcs = Utils.getGCStatst();
       long totalGCCount = 0;
       long totalGCTime = 0;
