@@ -9,14 +9,36 @@ class MetricLogData:
         with open(file, 'r') as f:
             for line in f:
                 metric, (time, value) = self.toMetricMap(line)
-                if metric not in self.metric_mp:
-                    self.metric_mp[metric] = []
-                self.metric_mp[metric].append((time, value))
+                if metric == '#connections' or metric == '#disconnections':
+                    if metric == '#connections':
+                        if metric not in self.metric_mp:
+                            self.metric_mp[metric] = []
+                            con_prevvalue = value
+                        else:
+                            con_tmp = value
+                            value = value - con_prevvalue
+                            con_prevvalue = con_tmp
+                            self.metric_mp[metric].append((time, value))
+
+                    if metric == '#disconnections':
+                        if metric not in self.metric_mp:
+                            self.metric_mp[metric] = []
+                            discon_prevvlaue = value
+                        else:
+                            discon_tmp = value
+                            value = value - discon_prevvlaue
+                            discon_prevvlaue = discon_tmp
+                            self.metric_mp[metric].append((time, value))
+
+                else:
+                    if metric not in self.metric_mp:
+                        self.metric_mp[metric] = []
+                    self.metric_mp[metric].append((time, value))
 
         # Convert to matrix
         start = self.toTimeStamp(start)
         self.result = self.acumulativeResultAll(start, interval, self.metric_mp)
-        print self.result
+        #print self.result
 
 
     # get date formatted to timestamp
@@ -77,21 +99,31 @@ class MetricLogData:
 
 
 class LogDataGrapher:
-    def __init__(self, data_map):
+    def __init__(self, data_map, start, interval):
+        start = self.toTimeStamp(start)
+        end = start + interval
         for metric in data_map:
-            self.metricGrapher(data_map, metric)
+            self.metricGrapher(data_map, metric, end)
 
 
 
+    def toTimeStamp(self, date):
+        """
 
+        :param String date:
+        :return: Int timestamp
+        """
+        timestamp = time.mktime(time.strptime(date, '%Y-%m-%d %H:%M:%S'))
+        return timestamp
 
-    def metricGrapher(self, data_map, metric):
+    def metricGrapher(self, data_map, metric, end):
 
         x_data = []
         y_data = []
         for tup in data_map[metric]:
-            x_data.append(tup[0])
-            y_data.append(tup[1])
+            if tup[0] < end:
+                x_data.append(tup[0])
+                y_data.append(tup[1])
         fig, ax = plt.subplots(nrows=1, ncols=1)
         plt.plot(x_data, y_data)
         plt.xlabel("time")
@@ -103,6 +135,22 @@ class LogDataGrapher:
 
 
 
-metricLogData = MetricLogData('metric.log', '2017-10-25 09:18:21', 500)
+metricLogData = MetricLogData('metric.log.1', '2017-11-08 00:42:41', 22000)
 data_map = metricLogData.metric_mp
-LogDataGrapher(data_map)
+LogDataGrapher(data_map, '2017-11-08 00:42:41', 22000)
+
+class LogDataParralleSet:
+    def __init__(self, file_set, start, interval):
+        self.metrics = self.getParralleSet(file_set, start, interval)
+
+
+    def getParralleSet(self, file_set, start, interval):
+        parralle_set = []
+        for f in file_set:
+            metricData = MetricLogData(f, start, interval)
+            parralle_set += metricData.result
+        return parralle_set
+
+# parralle_dataset = LogDataParralleSet(('metric0.log', 'metric1.log', 'metric2.log'),'2017-11-07 03:07:46', 28000)
+#
+# print parralle_dataset.metrics
