@@ -4,12 +4,12 @@
   #include <string.h>
   
 #define loop_index 100
-#define refresh_interval 2
+#define refresh_interval 5 
 int main(void) {
 
       int i;
       char **p=(char**)malloc(loop_index*sizeof(char*));
-      
+      int malloc_size = 40 * 1 << 20;      
       /* intro message */
       printf("Starting ...\n");
       while(1){
@@ -17,14 +17,14 @@ int main(void) {
       for (i = 0; i < loop_index; ++i) {
 
           /* failure to allocate memo*/
-	if ((*(p+i) = malloc(1<<20)) == NULL) {
+	if ((*(p+i) = malloc(malloc_size)) == NULL) {
               printf("Malloc failed at %d MB\n", i);
               return 0;
 	}
-
+	sleep(0.03 * i);
           /* take memory and tell user where we are at */
-	memset(*(p+i), 0, (1<<20));
-          printf("Allocated %d to %d MB\n", i, i+1);
+	memset(*(p+i), 0, (malloc_size));
+          // printf("Allocated %d to %d MB\n", i, i+1);
 
       }
 
@@ -33,8 +33,10 @@ int main(void) {
       sleep(refresh_interval);
       for (i=0;i<loop_index;i++){
 	free(*(p+i));
-        printf("Free %d to %d MB\n", i, i+1);
+        sleep(0.03 * i);
+	// printf("Free %d to %d MB\n", i, i+1);
       }
+	break;	
       }
       return 0;
 
