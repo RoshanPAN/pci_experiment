@@ -70,7 +70,7 @@ class MetricLogParser(object):
         return len(self.log_records)
 
 class YCSBLogRecord(object):
-    REGEX_THROUGHPUT = re.compile(r"(\d+?\.\d)\scurrent ops\/sec;")
+    REGEX_THROUGHPUT = re.compile(r"(\d+?\.*\d*)\scurrent ops\/sec;")
     REGEX_DATETIME = re.compile(r"(\d+-\d+-\d+ \d+:\d+:\d+):\d+")
 
     def __init__(self, record):
