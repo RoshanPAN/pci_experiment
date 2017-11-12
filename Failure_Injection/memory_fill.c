@@ -4,12 +4,12 @@
   #include <string.h>
   
 #define loop_index 100
-#define refresh_interval 5 
+#define refresh_interval 30
 int main(void) {
 
       int i;
       char **p=(char**)malloc(loop_index*sizeof(char*));
-      int malloc_size = 40 * 1 << 20;      
+      int malloc_size = 46.5 * (1 << 20);      
       /* intro message */
       printf("Starting ...\n");
       while(1){
@@ -33,7 +33,7 @@ int main(void) {
       sleep(refresh_interval);
       for (i=0;i<loop_index;i++){
 	free(*(p+i));
-        sleep(0.03 * i);
+        if(i < 30) {sleep(0.03 * i);}
 	// printf("Free %d to %d MB\n", i, i+1);
       }
 	break;	
