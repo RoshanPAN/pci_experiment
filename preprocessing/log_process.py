@@ -1,6 +1,7 @@
 import time, math
 import os
 import numpy as np
+import re
 
 METRICS_ORDERED = ['#blocked_process', '#connections', '#disconnections', '#physical_disk_read',
                      '#physical_disk_write', '#running_process', '#sleeping_process', '#threads',
@@ -69,11 +70,13 @@ class MetricLogParser(object):
         return len(self.log_records)
 
 class YCSBLogRecord(object):
+    REGEX_THROUGHPUT = re.compile(r"(\d+?\.\d)\scurrent ops\/sec;")
+    REGEX_DATETIME = re.compile(r"(\d+-\d+-\d+ \d+:\d+:\d+):\d+")
+
     def __init__(self, record):
-        contents = record.split(' ')
-        record_time = ' '.join(contents[0:4]) + ' ' + contents[5]
-        self.timestamp = int(time.mktime(time.strptime(record_time, "%a %b %d %H:%M:%S %Y")))
-        self.value = float(contents[-1])
+        record_time = re.findall(YCSBLogRecord.REGEX_DATETIME, record)[0]
+        self.timestamp = int(time.mktime(time.strptime(record_time, '%Y-%m-%d %H:%M:%S')))
+        self.value = float(re.findall(YCSBLogRecord.REGEX_THROUGHPUT, record)[0])
         self.type = 'throughput'
 
     def __str__(self):
@@ -86,7 +89,7 @@ class YCSBLogRecord(object):
 class YCSBLogParser(object):
     def __init__(self, log_folder_path):
         # parse each file
-        file_name = "YCSB.log"
+        file_name = "YCSB_redirect.log"
         file_path = log_folder_path + os.sep + file_name
         self.log_records = YCSBLogParser.parse_file(file_path)
         self.log_records.sort(lambda x, y: x.timestamp - y.timestamp)
@@ -97,7 +100,7 @@ class YCSBLogParser(object):
         with open(file_path, "r") as fh:
             for line in fh:
                 line = line.strip('\n')
-                if line in ['']:
+                if line in [''] or len(re.findall(YCSBLogRecord.REGEX_THROUGHPUT, line)) == 0:
                     continue
                 r = YCSBLogRecord(line)
                 if math.isnan(r.value):
