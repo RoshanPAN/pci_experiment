@@ -31,7 +31,18 @@ class MetricLogParser(object):
             file_path = log_folder_path + os.sep + file_name
             self.log_records += MetricLogParser.parse_file(file_path)
         self.log_records.sort(lambda x, y: x.timestamp - y.timestamp)
+        # Deal with cumulative value: #connections, #disconnections
+        self.cumulative2incremental('#disconnections')
+        self.cumulative2incremental('#connections')
         self.update_record_map()
+
+    def cumulative2incremental(self, record_type):
+        val_prev = 0.0
+        for r in self.log_records:
+            if r.type == record_type:
+                tmp = r.value
+                r.value = r.value - val_prev
+                val_prev = tmp
 
     def update_record_map(self):
         self.record_map = {}
