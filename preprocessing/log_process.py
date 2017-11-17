@@ -133,14 +133,14 @@ class YCSBLogParser(object):
 class IntervaledSingleMachineFeatureVectors(object):
     def __init__(self, records, start_ts, end_ts, interval=30, is_ycsb_log=False):
         records.sort(lambda x, y: x.timestamp - y.timestamp)
-        # Put records into intervaled buckets (list of tuple)
+        # Put records into intervaled buckets (list of list)
         i = 0
         self.intervaled_records = []
         self.intervals = []
         for ts in xrange(start_ts + interval, end_ts + 1, interval):
             start, end = ts - interval, ts  # right side of this range is open [start, end)
             cur_interval = []
-            while True:
+            while True and i < len(records):
                 r = records[i]
                 if r.timestamp >= end:  # record belong to later interval
                     break
@@ -182,9 +182,10 @@ class IntervaledSingleMachineFeatureVectors(object):
                 for type in ['throughput']:
                     values = type2value_map[type]
                     if len(values) == 0:
-                        features = [-1.0, -1.0, -1.0]  # Value Missing
+                        features = [-100.0, -100.0, -100.0]  # Value Missing
                     else:
                         features = [max(values), float(sum(values)) / len(values), min(values)]  # max, avg, min
+                        # print features
                     feature_vec += features
                 self.fvs.append(feature_vec)
 
